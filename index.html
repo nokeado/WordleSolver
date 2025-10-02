@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solver Wordle - Interfaz Original</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎯 Solver Wordle</h1>
+            <p class="subtitle">Interfaz exacta del Wordle original con solver inteligente</p>
+        </header>
+
+        <main class="main-content">
+            <div class="game-section">
+                <!-- Cuadrícula de Wordle 6x5 -->
+                <div class="wordle-grid">
+                    <div class="grid-container">
+                        <!-- Se generarán 30 casillas (6 filas × 5 columnas) dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Botones de colores para la fila activa -->
+                <div id="colorControls" class="color-controls hidden">
+                    <h3>Marca el resultado de cada letra:</h3>
+                    <div class="row-colors">
+                        <div class="letter-color-group">
+                            <span class="letter-display"></span>
+                            <div class="color-buttons">
+                                <button class="color-btn verde" data-color="verde" title="Letra correcta en posición correcta"></button>
+                                <button class="color-btn amarillo" data-color="amarillo" title="Letra en palabra, posición incorrecta"></button>
+                                <button class="color-btn gris selected" data-color="gris" title="Letra no está en la palabra"></button>
+                            </div>
+                        </div>
+                        <div class="letter-color-group">
+                            <span class="letter-display"></span>
+                            <div class="color-buttons">
+                                <button class="color-btn verde" data-color="verde"></button>
+                                <button class="color-btn amarillo" data-color="amarillo"></button>
+                                <button class="color-btn gris selected" data-color="gris"></button>
+                            </div>
+                        </div>
+                        <div class="letter-color-group">
+                            <span class="letter-display"></span>
+                            <div class="color-buttons">
+                                <button class="color-btn verde" data-color="verde"></button>
+                                <button class="color-btn amarillo" data-color="amarillo"></button>
+                                <button class="color-btn gris selected" data-color="gris"></button>
+                            </div>
+                        </div>
+                        <div class="letter-color-group">
+                            <span class="letter-display"></span>
+                            <div class="color-buttons">
+                                <button class="color-btn verde" data-color="verde"></button>
+                                <button class="color-btn amarillo" data-color="amarillo"></button>
+                                <button class="color-btn gris selected" data-color="gris"></button>
+                            </div>
+                        </div>
+                        <div class="letter-color-group">
+                            <span class="letter-display"></span>
+                            <div class="color-buttons">
+                                <button class="color-btn verde" data-color="verde"></button>
+                                <button class="color-btn amarillo" data-color="amarillo"></button>
+                                <button class="color-btn gris selected" data-color="gris"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="color-legend">
+                        <div class="legend-item">
+                            <span class="color-sample verde"></span>
+                            <span>Verde: Correcta y en posición</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="color-sample amarillo"></span>
+                            <span>Amarillo: En palabra, posición incorrecta</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="color-sample gris"></span>
+                            <span>Gris: No está en la palabra</span>
+                        </div>
+                    </div>
+                    <button id="confirmRowBtn" class="btn btn--primary btn--full-width">
+                        Confirmar fila
+                    </button>
+                </div>
+
+                <!-- Panel de debug y carga de archivo -->
+                <div class="debug-section">
+                    <div class="file-upload card">
+                        <div class="card__header">
+                            <h3>📁 Cargar Diccionario</h3>
+                        </div>
+                        <div class="card__body">
+                            <input type="file" id="fileInput" accept=".txt" class="form-control">
+                            <p class="upload-info">Sube un archivo .txt con palabras de 5 letras (una por línea)</p>
+                        </div>
+                    </div>
+
+                    <div class="debug-panel card">
+                        <div class="card__header">
+                            <h3>🔍 Debug - Algoritmo paso a paso</h3>
+                            <button id="clearLogBtn" class="btn btn--outline btn--sm">Limpiar</button>
+                        </div>
+                        <div class="card__body">
+                            <div id="debugLog" class="debug-log">
+                                <p class="debug-entry info">Aplicación iniciada - Diccionario cargado con <span id="initialWordCount">0</span> palabras</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="algorithm-visual card">
+                        <div class="card__header">
+                            <h3>⚙️ Filtrado Visual</h3>
+                        </div>
+                        <div class="card__body">
+                            <div id="algorithmSteps" class="algorithm-steps">
+                                <p class="empty-message">Los pasos del algoritmo aparecerán aquí cuando apliques filtros</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instrucciones -->
+                <div class="instructions-card card">
+                    <div class="card__body">
+                        <h3>Cómo usar:</h3>
+                        <ol>
+                            <li>Opcionalmente carga tu diccionario .txt personalizado</li>
+                            <li>Haz clic en las casillas para escribir tu palabra</li>
+                            <li>Una vez completa la fila, marca los colores según Wordle</li>
+                            <li>Confirma la fila para filtrar las palabras</li>
+                            <li>Ve las palabras restantes y el debug paso a paso</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <!-- Palabras restantes -->
+                <div class="remaining-words card">
+                    <div class="card__header">
+                        <h3>Palabras posibles</h3>
+                        <span id="remainingCounter" class="status status--info">
+                            <span id="remainingCount">0</span> palabras
+                        </span>
+                    </div>
+                    <div class="card__body">
+                        <div id="remainingWordsList" class="remaining-words-list">
+                            <!-- Se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mejores sugerencias -->
+                <div class="suggestions-card card">
+                    <div class="card__header">
+                        <h3>Mejores próximas palabras</h3>
+                    </div>
+                    <div class="card__body">
+                        <div id="suggestionsList" class="suggestions-list">
+                            <p class="empty-message">Ingresa una palabra para ver sugerencias</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas -->
+                <div class="stats-card card">
+                    <div class="card__header">
+                        <h3>Estadísticas</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-number" id="attemptCount">0</span>
+                                <span class="stat-label">Intentos</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="remainingPercent">100%</span>
+                                <span class="stat-label">Restantes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles -->
+                <div class="controls">
+                    <button id="resetBtn" class="btn btn--outline btn--full-width">
+                        🔄 Reiniciar juego
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
